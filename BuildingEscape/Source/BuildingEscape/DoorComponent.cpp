@@ -19,6 +19,10 @@ UDoorComponent::UDoorComponent()
 void UDoorComponent::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void UDoorComponent::OpenDoor()
+{
 	AActor *owner = GetOwner();
 	FRotator newRotation = FRotator(0.0f, 120.0f, 0.0f);
 	owner->SetActorRotation(newRotation);
@@ -30,6 +34,11 @@ void UDoorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	// poll a trigger valume every frame
+	if (PressurePlate->IsOverlappingActor(ActorThatOpen)) {
+		//if the ActorThatOpen
+		OpenDoor();
+	}
+
 }
 
