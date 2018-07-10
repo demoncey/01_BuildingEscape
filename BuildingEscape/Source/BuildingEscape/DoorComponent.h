@@ -33,6 +33,6 @@ private:
 	float OpenAngle = 90.f;
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate;
-	UPROPERTY(EditAnywhere)
+	//UPROPERTY(EditAnywhere)
 	AActor* ActorThatOpen;//remember pawn inherits from actor
 };
