@@ -2,6 +2,7 @@
 
 #include "Grabber.h"
 #include"Engine/World.h"
+#include"Runtime/Engine/Public/DrawDebugHelpers.h"
 
 #define OUT
 
@@ -32,8 +33,14 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint( OUT PlayerViewPointLocation,OUT PlayerViewpointRotation);
 	UE_LOG(LogTemp, Error, TEXT("Location %s Rotation %s"), *PlayerViewPointLocation.ToString(),* PlayerViewpointRotation.ToString());
-	//https://api.unrealengine.com/INT/API/Runtime/Engine/DrawDebugLine/index.html
+	DrawDebugViewVector();
 	//ray cast out to reach distance
 	//see what we hit
+}
+
+void UGrabber::DrawDebugViewVector()
+{
+	auto ViewVectorEnd = PlayerViewPointLocation + reach * PlayerViewpointRotation.Vector();
+	DrawDebugLine(GetWorld(), PlayerViewPointLocation, ViewVectorEnd, FColor(255, 0, 0), false, 0.f, 0.f, 2.f);
 }
 
