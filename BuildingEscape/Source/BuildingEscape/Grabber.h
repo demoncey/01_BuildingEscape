@@ -24,11 +24,14 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	FHitResult CheckObjectHitOnViewLine();
+
 	void DrawDebugViewVector();
 
 private:
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewpointRotation;
+	FVector ViewVectorEnd;
 	const float reach = 100.f;
 	
 };
