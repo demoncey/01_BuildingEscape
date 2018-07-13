@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Runtime/Engine/Classes/PhysicsEngine/PhysicsHandleComponent.h"
+#include "Runtime/Engine/Classes/Components/InputComponent.h"
 #include "Grabber.generated.h"
 
 
@@ -33,5 +35,8 @@ private:
 	FRotator PlayerViewpointRotation;
 	FVector ViewVectorEnd;
 	const float reach = 100.f;
-	
+	//attached in runtime
+	UPhysicsHandleComponent* PhysicsHandle=nullptr;
+	UInputComponent* InputComponent = nullptr;
+	void Grab();
 };

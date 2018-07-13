@@ -23,7 +23,22 @@ void UGrabber::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	//look for attached Physicshandle
+	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (PhysicsHandle) {
+		UE_LOG(LogTemp, Error, TEXT("PhysicsHandle  found"));
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("PhysicsHandle not found"));
+	}
+	if (InputComponent) {
+		UE_LOG(LogTemp, Error, TEXT("InputComponent  found"));
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("InputComponent not found"));
+	}
 }
 
 
@@ -39,6 +54,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	DrawDebugViewVector();
 	FHitResult Hit=CheckObjectHitOnViewLine();
 	//see what we hit
+
 }
 
 FHitResult UGrabber::CheckObjectHitOnViewLine()
@@ -59,4 +75,6 @@ void UGrabber::DrawDebugViewVector()
 	ViewVectorEnd = PlayerViewPointLocation + reach * PlayerViewpointRotation.Vector();
 	DrawDebugLine(GetWorld(), PlayerViewPointLocation, ViewVectorEnd, FColor(255, 0, 0), false, 0.f, 0.f, 2.f);
 }
-
+void UGrabber::Grab() {
+	UE_LOG(LogTemp, Warning, TEXT("Grab executed"));
+}
