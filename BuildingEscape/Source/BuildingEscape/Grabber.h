@@ -48,6 +48,6 @@ private:
 	void Grab();
 	void Release();
 	void DrawDebugViewVector();
-	void CalcActorViewVector(FVector &playerViewPointLocation, FVector &viewVectorEnd, FRotator &playerViewpointRotation);
+	void CalcOwnerViewVector(FVector &playerViewPointLocation, FVector &viewVectorEnd, FRotator &playerViewpointRotation);
 	
 };
