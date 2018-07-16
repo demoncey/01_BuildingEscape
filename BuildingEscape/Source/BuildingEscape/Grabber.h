@@ -22,21 +22,32 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	void AttachInputComponent();
+
+	void AttachPhysicsHandle();
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	FHitResult CheckObjectHitOnViewLine();
+	const FHitResult GetFirstObjectHitOnViewLine();
 
-	void DrawDebugViewVector();
+	
+
+	
 
 private:
+	bool debulDrawnLine =false;
 	FVector PlayerViewPointLocation;
-	FRotator PlayerViewpointRotation;
+	FRotator PlayerViewPointRotation;
 	FVector ViewVectorEnd;
 	const float reach = 100.f;
 	//attached in runtime
 	UPhysicsHandleComponent* PhysicsHandle=nullptr;
 	UInputComponent* InputComponent = nullptr;
 	void Grab();
+	void Release();
+	void DrawDebugViewVector();
+	void CalcActorViewVector(FVector &playerViewPointLocation, FVector &viewVectorEnd, FRotator &playerViewpointRotation);
+	
 };
