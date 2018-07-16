@@ -43,8 +43,7 @@ void UGrabber::AttachInputComponent()
 void UGrabber::AttachPhysicsHandle()
 {
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if (PhysicsHandle) {}
-	else {
+	if (PhysicsHandle == nullptr) {
 		UE_LOG(LogTemp, Error, TEXT("PhysicsHandle not found"));
 	}
 }
@@ -59,8 +58,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		DrawDebugViewVector();
 	}
 	if (PhysicsHandle && PhysicsHandle->GrabbedComponent) {
-		CalcOwnerViewVector(OUT PlayerViewPointLocation, OUT ViewVectorEnd, OUT PlayerViewPointRotation);
-		PhysicsHandle->SetTargetLocation(ViewVectorEnd);
+		PhysicsHandle->SetTargetLocation(GetReachLineEnd());
 	}
 	
 }
@@ -70,27 +68,31 @@ const FHitResult UGrabber::GetFirstObjectHitOnViewLine()
 	///trace of specified object on view line first hit
 	FHitResult Hit;
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-	CalcOwnerViewVector(OUT PlayerViewPointLocation, OUT ViewVectorEnd, OUT PlayerViewPointRotation);
-	GetWorld()->LineTraceSingleByObjectType(OUT Hit, PlayerViewPointLocation, ViewVectorEnd, FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), TraceParameters);
+	GetWorld()->LineTraceSingleByObjectType(OUT Hit, GetReachLineStart(), GetReachLineEnd(), FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody), TraceParameters);
 	return Hit;
 }
 
 void UGrabber::DrawDebugViewVector()
 {
-	CalcOwnerViewVector(OUT PlayerViewPointLocation,OUT ViewVectorEnd,OUT PlayerViewPointRotation);
-	DrawDebugLine(GetWorld(), PlayerViewPointLocation, ViewVectorEnd, FColor(255, 0, 0), false, 0.f, 0.f, 2.f);
+	DrawDebugLine(GetWorld(), GetReachLineStart(), GetReachLineEnd(), FColor(255, 0, 0), false, 0.f, 0.f, 2.f);
 }
-void UGrabber::CalcOwnerViewVector(FVector &ownerViewPointLocation,FVector &viewVectorEnd, FRotator &ownerViewpointRotation)
+FVector UGrabber::GetReachLineEnd()
 {
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT ownerViewPointLocation, OUT ownerViewpointRotation);
-	//ownerViewPointLocation=GetOwner()->GetActorLocation();
-	//ownerViewpointRotation = GetOwner()->GetActorRotation();
-	UE_LOG(LogTemp, Error, TEXT("Player Location %s Rotation %s"), *ownerViewPointLocation.ToString(), *ownerViewpointRotation.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("Actor Location %s Rotation %s"), *GetOwner()->GetActorLocation().ToString(), *GetOwner()->GetActorRotation().ToString());
-
-	viewVectorEnd = ownerViewPointLocation + reach * ownerViewpointRotation.Vector();
-	UE_LOG(LogTemp, Warning, TEXT("Vector end %s"), *viewVectorEnd.ToString());
+	FVector PlayerLocation;
+	FRotator PlayerRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerLocation, OUT PlayerRotation);
+	auto viewVectorEnd = PlayerLocation + reach * PlayerRotation.Vector();
+	return viewVectorEnd;
 }
+
+FVector UGrabber::GetReachLineStart()
+{
+	FVector PlayerLocation;
+	FRotator PlayerRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerLocation, OUT PlayerRotation);
+	return PlayerLocation;
+}
+
 void UGrabber::Grab() {
 
 	UE_LOG(LogTemp, Warning, TEXT("Grab executed"));

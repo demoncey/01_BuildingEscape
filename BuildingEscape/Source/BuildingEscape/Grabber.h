@@ -38,9 +38,9 @@ public:
 
 private:
 	bool debulDrawnLine =false;
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-	FVector ViewVectorEnd;
+//	FVector PlayerViewPointLocation;
+//	FRotator PlayerViewPointRotation;
+//	FVector ViewVectorEnd;
 	const float reach = 100.f;
 	//attached in runtime
 	UPhysicsHandleComponent* PhysicsHandle=nullptr;
@@ -48,6 +48,6 @@ private:
 	void Grab();
 	void Release();
 	void DrawDebugViewVector();
-	void CalcOwnerViewVector(FVector &playerViewPointLocation, FVector &viewVectorEnd, FRotator &playerViewpointRotation);
-	
+	FVector GetReachLineEnd();
+	FVector GetReachLineStart();
 };
