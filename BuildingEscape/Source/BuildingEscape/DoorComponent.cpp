@@ -47,13 +47,11 @@ void UDoorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	if (GetTotalMassOfActors()>10.f) {
 		//if the ActorThatOpen
 		OpenDoor();
-		//LastDoorOpenTime = GetWorld()->GetTimeSeconds();
-	}else{
-		CloseDoor();
+		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
 	}
-//	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime >= DoorCloseDelay) {
-//			CloseDoor();
-//	}
+	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime >= DoorCloseDelay) {
+			CloseDoor();
+	}
 }
 
 
